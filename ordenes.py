@@ -54,3 +54,9 @@ def eliminar_pedido(id):
     db.session.delete(pedido)
     db.session.commit()
     return jsonify({'message': f'Item {id} eliminado del carrito'}), 200
+
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True, port=5003)
