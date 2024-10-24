@@ -9,3 +9,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carrito.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+class Carritos(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable= False)
+    producto_id = db.Column(db.Integer, nullable=False)
+    cantidad = db.Column(db.Integer, default=1)
+    fecha_agregado = db.Column(db.DateTime, default=func.now())
