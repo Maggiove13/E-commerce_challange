@@ -28,3 +28,11 @@ def crear_pedido():
     db.session.add(nuevo_pedido)
     db.session.commit()
     return jsonify({'id': nuevo_pedido.id, 'estado': nuevo_pedido.estado}), 201
+
+
+
+@app.route('/pedidos', methods=['GET'])
+def listar_pedidos():
+    pedidos = Pedido.query.all()
+    
+    return jsonify([{'id': p.id, 'productos': p.productos, 'cantidad': p.cantidad, 'estado': p.estado, 'fecha_compra': p.fecha_compra} for p in pedidos]), 200
