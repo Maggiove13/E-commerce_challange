@@ -77,3 +77,44 @@ def eliminar_item(user_id, producto_id):
     db.session.commit()
     
     return jsonify({'message': f'Item product_id: {producto_id} eliminado de tu carrito'}), 200
+
+
+@app.route('/carrito/<int:user_id>/finalizar_compra', methods=['POST'])
+def finalizar_compra(user_id):
+    
+    items = Carritos.query.filter_by(user_id=user_id).all()
+    
+    if not items:
+        return jsonify({"error": "El carrito está vacío"}), 400
+    
+    # Preparar los datos para el pedido
+    productos = []
+    cantidades = []
+    
+    for item in items:
+        productos.append(item.producto_id)
+        cantidades.append(item.cantidad)
+    
+    
+    productos_json = ', '.join(map(str, productos))
+    cantidades_json = ', '.join(map(str, cantidades))
+    
+    
+    pedido_data = {
+        "productos": productos_json,
+        "cantidad": cantidades_json,
+        "fecha_compra": datetime.now().isoformat()  
+    }
+    
+    # Enviar la solicitud POST al microservicio de pedidos
+    response = requests.post('http://localhost:5003/pedidos', json=pedido_data)
+    
+    if response.status_code == 201:
+        
+        for item in items:
+            db.session.delete(item)
+        db.session.commit()
+        
+        return jsonify({"message": "Compra finalizada con éxito", "pedido": response.json()}), 201
+    else:
+        return jsonify({"error": "Error al crear el pedido", "details": response.json()}), response.status_code
