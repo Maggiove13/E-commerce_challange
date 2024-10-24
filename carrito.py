@@ -45,3 +45,24 @@ def listar_carrito(user_id):
     return jsonify([{'id': item.id, 
                     'producto_id': item.producto_id, 
                     'cantidad': item.cantidad} for item in items]), 200
+
+
+
+@app.route('/carrito/<int:user_id>/<int:producto_id>', methods=['PUT'])
+def modificar_item(user_id, producto_id):
+    data = request.get_json()
+    item = Carritos.query.filter_by(user_id = user_id, producto_id = producto_id).first_or_404()
+    
+    item.user_id = data['user_id']
+    item.producto_id = data ['producto_id']
+    
+    if 'cantidad' in data:
+        item.cantidad = data['cantidad']
+        
+    db.session.commit()
+    
+    return jsonify({
+        'user_id': item.user_id,
+        'id': item.id, 
+        'producto_id': item.producto_id, 
+        'cantidad': item.cantidad}), 200
