@@ -35,3 +35,13 @@ def agregar_al_carrito():
                     'id': nuevo_item.id, 
                     'producto_id': nuevo_item.producto_id,
                     'cantidad': nuevo_item.cantidad}), 201
+
+
+
+@app.route('/carrito/<int:user_id>', methods=['GET'])
+def listar_carrito(user_id):
+    items = Carritos.query.filter_by(user_id = user_id).all()
+    
+    return jsonify([{'id': item.id, 
+                    'producto_id': item.producto_id, 
+                    'cantidad': item.cantidad} for item in items]), 200
