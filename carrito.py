@@ -16,3 +16,22 @@ class Carritos(db.Model):
     producto_id = db.Column(db.Integer, nullable=False)
     cantidad = db.Column(db.Integer, default=1)
     fecha_agregado = db.Column(db.DateTime, default=func.now())
+
+
+@app.route('/carrito', methods=['POST'])
+def agregar_al_carrito():
+    data = request.get_json()
+    nuevo_item = Carritos(
+        user_id = data['user_id'],
+        producto_id = data['producto_id'],
+        cantidad = data.get('cantidad', 1)
+    )
+    
+    print(nuevo_item)
+    
+    db.session.add(nuevo_item)
+    db.session.commit()
+    return jsonify({'user_id': nuevo_item.user_id, 
+                    'id': nuevo_item.id, 
+                    'producto_id': nuevo_item.producto_id,
+                    'cantidad': nuevo_item.cantidad}), 201
