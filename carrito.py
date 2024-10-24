@@ -66,3 +66,14 @@ def modificar_item(user_id, producto_id):
         'id': item.id, 
         'producto_id': item.producto_id, 
         'cantidad': item.cantidad}), 200
+    
+
+
+@app.route('//carrito/<int:user_id>/<int:producto_id>', methods=['DELETE'])
+def eliminar_item(user_id, producto_id):
+    item = Carritos.query.filter_by(user_id = user_id, producto_id = producto_id).first_or_404()
+
+    db.session.delete(item)
+    db.session.commit()
+    
+    return jsonify({'message': f'Item product_id: {producto_id} eliminado de tu carrito'}), 200
