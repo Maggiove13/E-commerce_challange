@@ -49,6 +49,13 @@ def actualizar_producto(id):
     return jsonify({'id': producto.id, 'nombre': producto.nombre}), 200
 
 
+@app.route('/productos/<int:id>', methods=['DELETE'])
+def eliminar_producto(id):
+    producto = Producto.query.get_or_404(id)
+    db.session.delete(producto)
+    db.session.commit()
+    return jsonify({'message': f'Producto_id: {id}, eliminado con éxito'}), 200
+
 
 if __name__ == '__main__':
     with app.app_context():
