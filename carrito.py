@@ -36,3 +36,13 @@ def listar_pedidos():
     pedidos = Pedido.query.all()
     
     return jsonify([{'id': p.id, 'productos': p.productos, 'cantidad': p.cantidad, 'estado': p.estado, 'fecha_compra': p.fecha_compra} for p in pedidos]), 200
+
+
+
+@app.route('/pedidos/<int:id>', methods=['PUT'])
+def actualizar_pedido(id):
+    data = request.get_json()
+    pedido = Pedido.query.get_or_404(id)
+    pedido.estado = data.get('estado', pedido.estado)
+    db.session.commit()
+    return jsonify({'id': pedido.id, 'estado': pedido.estado}), 200
