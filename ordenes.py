@@ -46,3 +46,11 @@ def actualizar_pedido(id):
     pedido.estado = data.get('estado', pedido.estado)
     db.session.commit()
     return jsonify({'id': pedido.id, 'estado': pedido.estado}), 200
+
+
+@app.route('/pedidos/<int:id>', methods=['DELETE'])
+def eliminar_pedido(id):
+    pedido = Pedido.query.get_or_404(id)
+    db.session.delete(pedido)
+    db.session.commit()
+    return jsonify({'message': f'Item {id} eliminado del carrito'}), 200
