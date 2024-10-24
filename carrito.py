@@ -118,3 +118,9 @@ def finalizar_compra(user_id):
         return jsonify({"message": "Compra finalizada con éxito", "pedido": response.json()}), 201
     else:
         return jsonify({"error": "Error al crear el pedido", "details": response.json()}), response.status_code
+
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(port=5002)
