@@ -79,6 +79,7 @@ def eliminar_item(user_id, producto_id):
     return jsonify({'message': f'Item product_id: {producto_id} eliminado de tu carrito'}), 200
 
 
+
 @app.route('/carrito/<int:user_id>/finalizar_compra', methods=['POST'])
 def finalizar_compra(user_id):
     
